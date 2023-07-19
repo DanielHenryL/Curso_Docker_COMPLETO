@@ -1,16 +1,8 @@
-# dockerfile desarrollo
-FROM node:19-alpine3.15 as dev
-WORKDIR /app
-COPY package.json ./
-RUN yarn install --network-timeout 100000
-CMD [ "yarn","start:dev" ]
 
-
-# dockerfile produccion
 FROM node:19-alpine3.15 as dev-deps
 WORKDIR /app
 COPY package.json package.json
-RUN yarn install --frozen-lockfile --network-timeout 100000
+RUN yarn install --frozen-lockfile
 
 
 FROM node:19-alpine3.15 as builder
@@ -23,7 +15,7 @@ RUN yarn build
 FROM node:19-alpine3.15 as prod-deps
 WORKDIR /app
 COPY package.json package.json
-RUN yarn install --prod --frozen-lockfile --network-timeout 100000
+RUN yarn install --prod --frozen-lockfile
 
 
 FROM node:19-alpine3.15 as prod
